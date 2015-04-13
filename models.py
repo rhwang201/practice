@@ -1,15 +1,25 @@
-from app import db
+from practice import db
 from sqlalchemy.dialects.postgres import JSON
-
-# TODO rhwang
 
 class User(db.Model):
   id = db.Column(db.Integer, primary_key=True)
+  username = db.Column(db.String(80))
+  password = db.Column(db.String(80))
+  joinDate = db.Column(db.DateTime)
+  firstName = db.Column(db.String(80))
+  lastName = db.Column(db.String(80))
+
 
   def __init__(self, username, email, password, joinDate, firstName, lastName):
+    self.username = username
+    self.email = email
+    self.password = password
+    self.joinDate = joinDate
+    self.firstName = firstName
+    self.lastName = lastName
 
   def __repr__(self):
-    return '<User >' % self.username
+    return '<User %s>' % self.username
 
 
 class Project(db.Model):
@@ -17,13 +27,28 @@ class Project(db.Model):
   name = db.Column(db.String(80))
 
   user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-  user = db.relationship('User', backref=db.backref('logs', lazy='dynamic'))
+  user = db.relationship('User', backref='projects')
+
+  def __init__(self, name, user):
+    self.name = name
+    self.user = user
+
+  def __repr__(self):
+    return '<Project %s>' % self.name
 
 
 class Log(db.Model):
   id = db.Column(db.Integer, primary_key=True)
-  timestamp = db.Column(db.Datetime)
-  time = db.Column(db.Double) # TODO
+  timestamp = db.Column(db.DateTime)
+  timeLogged = db.Column(db.Float)
 
   project_id = db.Column(db.Integer, db.ForeignKey('project.id'))
-  project = db.relationship('Project', backref=db.backref('logs', lazy='dynamic'))
+  project = db.relationship('Project', backref='logs')
+
+  def __init__(self, timestamp, timeLogged, project):
+    self.timestamp = timestamp
+    self.timeLogged = timeLogged
+    self.project = project
+
+  def __repr__(self):
+    return '<Log %s>' % self.timestamp

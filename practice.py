@@ -8,6 +8,8 @@ app.config.from_object(os.environ['APP_SETTINGS'])
 
 db = SQLAlchemy(app)
 
+from models import User, Project, Log
+
 
 @app.route('/')
 def hello():
@@ -16,12 +18,9 @@ def hello():
 
 @app.route('/projects.json')
 def projects():
-    dates = [datetime.datetime(2014, 1, 1), datetime.datetime(2014, 1, 2), datetime.datetime(2014, 1, 3)]
-    practice1 = zip(dates, [1, 0.5, 1])
-    practice2 = zip(dates, [0, 0, 4])
-    practice3 = zip(dates, [1.5, 1.5, 1.5])
+    user = User.query.filter_by(username='rhwang').first()
+    projects = [{'projectName': project.name, 'practice': [[log.timestamp, log.timeLogged] for log in project.logs]} for project in user.projects]
 
-    projects = [{'projectName': 'Foo', 'practice': practice1}, {'projectName': 'Bar', 'practice': practice2}, {'projectName': 'Zoo', 'practice': practice3}]
     return jsonify(projects=projects)
 
 if __name__ == '__main__':
