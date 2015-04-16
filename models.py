@@ -3,15 +3,14 @@ from sqlalchemy.dialects.postgres import JSON
 
 class User(db.Model):
   id = db.Column(db.Integer, primary_key=True)
-  username = db.Column(db.String(80))
+  email = db.Column(db.String(80))
   password = db.Column(db.String(80))
   joinDate = db.Column(db.DateTime)
   firstName = db.Column(db.String(80))
   lastName = db.Column(db.String(80))
 
 
-  def __init__(self, username, email, password, joinDate, firstName, lastName):
-    self.username = username
+  def __init__(self, email, password, joinDate, firstName, lastName):
     self.email = email
     self.password = password
     self.joinDate = joinDate
@@ -20,6 +19,18 @@ class User(db.Model):
 
   def __repr__(self):
     return '<User %s>' % self.username
+
+  def is_authenticated(self):
+    return True
+
+  def is_active(self):
+    return True
+
+  def is_anonymous(self):
+    return False
+
+  def get_id(self):
+    return unicode(self.id)
 
 
 class Project(db.Model):
