@@ -82,7 +82,7 @@ var ProjectBox = React.createClass({
   componentDidMount: function() {
     // TODO GET projects and set state
     $.ajax({
-      url: '/projects.json',
+      url: '/api/getProjects.json',
       dataType: 'json',
       success: function(data) {
         this.setState({data: data.projects});

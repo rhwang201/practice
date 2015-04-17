@@ -1,8 +1,8 @@
 import os
 import datetime
-from flask import Flask, render_template, jsonify, request, g
+from flask import Flask, render_template, jsonify, request, g, redirect, url_for
 from flask.ext.sqlalchemy import SQLAlchemy
-from flask.ext.login import LoginManager, current_user, login_user, AnonymousUserMixin
+from flask.ext.login import LoginManager, current_user, login_user, AnonymousUserMixin, logout_user
 
 app = Flask(__name__)
 print('App Settings', os.environ['APP_SETTINGS'])
@@ -26,8 +26,12 @@ def before_request():
     g.user = current_user
 
 
+###################
+# ROUTES          #
+###################
+
 @app.route('/', methods=['GET', 'POST'])
-def hello():
+def home():
     if g.user is not None and g.user.is_authenticated():
         return render_template('hello.html')
     form = LoginForm()  # TODO make form
@@ -44,9 +48,34 @@ def hello():
             return render_template('login.html', form=form)
     return render_template('login.html', form=form)
 
+@app.route('/logout')
+def logout():
+    logout_user()
+    return redirect(url_for('home'))
 
-@app.route('/projects.json')
-def projects():
+
+###################
+# API             #
+###################
+
+@app.route('/api/createProject.json')
+def createProject():
+    # TODO
+    return jsonify(projects=None)
+
+@app.route('/api/getProjects.json')
+def getProjects():
     projects = [{'projectName': project.name, 'practice': [[log.timestamp, log.timeLogged] for log in project.logs]} for project in g.user.projects]
 
     return jsonify(projects=projects)
+
+
+@app.route('/api/updateProject.json')
+def updateProject():
+    # TODO
+    return jsonify(projects=None)
+
+@app.route('/api/removeProject.json')
+def removeProject():
+    # TODO
+    return jsonify(projects=None)
