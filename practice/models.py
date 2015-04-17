@@ -18,7 +18,7 @@ class User(db.Model):
     self.lastName = lastName
 
   def __repr__(self):
-    return '<User %s>' % self.username
+    return '<User %s>' % self.email
 
   def is_authenticated(self):
     return True

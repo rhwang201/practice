@@ -233,7 +233,10 @@ var CreateProjectModal = React.createClass({
 });
 
 
-//React.render(
-//  <Application />,
-//  document.getElementById('react')
-//);
+var reactElement = document.getElementById('react');
+if (reactElement) {
+  React.render(
+    <Application />,
+    reactElement
+  );
+}
