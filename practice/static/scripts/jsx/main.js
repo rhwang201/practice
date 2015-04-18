@@ -51,7 +51,7 @@ var NavBar = React.createClass({
                   <li><a href="#">Another action</a></li>
                   <li><a href="#">Something else here</a></li>
                   <li className="divider"></li>
-                  <li><a href="#">Separated link</a></li>
+                  <li><a href="/logout">Logout</a></li>
                 </ul>
               </li>
             </ul>
