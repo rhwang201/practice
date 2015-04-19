@@ -33,7 +33,7 @@ def before_request():
 @app.route('/', methods=['GET', 'POST'])
 def home():
     if g.user is not None and g.user.is_authenticated():
-        return render_template('hello.html')
+        return render_template('home.html')
     form = LoginForm()  # TODO make form
     if form.validate_on_submit():
         email = form.email.data
@@ -42,7 +42,7 @@ def home():
 
         if valid:
             login_user(user) # TODO
-            return render_template('hello.html')
+            return render_template('home.html')
         else:
             #flash('Invalid login, please try again.')
             return render_template('login.html', form=form)
