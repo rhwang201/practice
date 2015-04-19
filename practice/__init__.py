@@ -58,24 +58,31 @@ def logout():
 # API             #
 ###################
 
-@app.route('/api/createProject.json')
+@app.route('/api/createProject', methods=['POST'])
 def createProject():
-    # TODO
-    return jsonify(projects=None)
+    data = request.get_json()
+    name = data['name']
 
-@app.route('/api/getProjects.json')
+    project = Project(name, g.user)
+    db.session.add(project)
+    db.session.commit()
+
+    projects = [{'projectName': project.name, 'practice': [[log.timestamp, log.timeLogged] for log in project.logs]} for project in g.user.projects]
+
+    return jsonify(projects=projects)
+
+@app.route('/api/getProjects.json', methods=['GET'])
 def getProjects():
     projects = [{'projectName': project.name, 'practice': [[log.timestamp, log.timeLogged] for log in project.logs]} for project in g.user.projects]
 
     return jsonify(projects=projects)
 
-
-@app.route('/api/updateProject.json')
+@app.route('/api/updateProject')
 def updateProject():
     # TODO
     return jsonify(projects=None)
 
-@app.route('/api/removeProject.json')
+@app.route('/api/removeProject')
 def removeProject():
     # TODO
     return jsonify(projects=None)

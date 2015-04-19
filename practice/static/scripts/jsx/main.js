@@ -12,16 +12,6 @@ var Application = React.createClass({
   }
 });
 
-/**
- * The component responsible for logging in a user.
- */
-var Login = React.createClass({
-  render: function() {
-    return (
-      <div>Login</div>
-    );
-  }
-});
 
 /**
  * Navigation Bar.
@@ -62,6 +52,7 @@ var NavBar = React.createClass({
   }
 });
 
+
 /**
  * Component that holds all of a user's project information.
  */
@@ -70,17 +61,28 @@ var ProjectBox = React.createClass({
     return {data: []};
   },
 
+  /**
+   * @param {Project] project
+   * Passed into CreateProjectModal. Optimistic update.
+   */
   handleAddProject: function(project) {
     var projects = this.state.data;
     var newProjects = projects.concat([project]);
-    this.setState({data: projects});
-
-    // TODO POST, $('#createModal').modal('hide')
-    console.log(name, frequency, time);
+    this.setState({data: newProjects});
   },
 
+  /**
+   * @param {Project[]] project
+   * Passed into CreateProjectModal.
+   */
+  handleAddComplete: function(projects) {
+    this.setState({data: projects});
+  },
+
+  /**
+   * GETs projects and sets state.
+   */
   componentDidMount: function() {
-    // TODO GET projects and set state
     $.ajax({
       url: '/api/getProjects.json',
       dataType: 'json',
@@ -91,7 +93,6 @@ var ProjectBox = React.createClass({
         console.error(this.props.url, status, err.toString());
       }.bind(this)
     });
-    //this.setState({data: this.props.data});
   },
 
   render: function() {
@@ -104,16 +105,20 @@ var ProjectBox = React.createClass({
       <div className="projectBox col-sm-8 col-sm-offset-2">
         <a className="btn btn-default" data-toggle="modal" data-target="#createModal">Add</a>
         { projectNodes }
-        <CreateProjectModal onAddProject={this.handleAddProject} />
+        <CreateProjectModal onAddProject={this.handleAddProject} onAPIReturn={this.handleAddComplete} />
       </div>
     );
   }
 });
 
+
 /**
  * Represents a Project.
  */
 var Project = React.createClass({
+  /**
+   * Toggles chart visibility.
+   */
   handleClick: function() {
     var domElement = React.findDOMNode(this);
 
@@ -123,6 +128,7 @@ var Project = React.createClass({
       $(domElement).find('.chart').slideUp();
     }
   },
+
   render: function() {
     return (
       <div className="project">
@@ -133,10 +139,14 @@ var Project = React.createClass({
   }
 });
 
+
 /**
  * Highcharts container
  */
 var PracticeChart = React.createClass({
+  /**
+   * Renders a Highcharts instance.
+   */
   renderChart: function() {
     var domElement = React.findDOMNode(this),
         data = this.props.data;
@@ -179,15 +189,37 @@ var PracticeChart = React.createClass({
   }
 });
 
-// Creating a new Project.
+
+/**
+ * Creating a new Project.
+ */
 var CreateProjectModal = React.createClass({
+  /**
+   * POST, and optimistic update.
+   */
   onSave: function() {
     var domElement = React.findDOMNode(this),
         name = React.findDOMNode(this.refs.name).value,
-        frequency = React.findDOMNode(this.refs.frequency).value,
+        frequency = React.findDOMNode(this.refs.frequency).value, // TODO update model
         time = React.findDOMNode(this.refs.time).value;
 
-    this.props.onAddProject({name: name, frequency: frequency, time: time});
+    this.props.onAddProject({projectName: name, frequency: frequency, time: time, practice: []});
+
+    $.ajax({
+      url: '/api/createProject',
+      contentType: 'application/json; charset=utf8',
+      type: 'POST',
+      data: JSON.stringify({name: name}),
+      success: function(data) {
+        var modal = React.findDOMNode(this);
+        $(modal).modal('hide');
+
+        this.props.onAPIReturn(data.projects);
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.error(this.props.url, status, err.toString());
+      }.bind(this)
+    });
     return;
   },
 
