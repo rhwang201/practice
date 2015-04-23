@@ -16,20 +16,14 @@
   </head>
 
   <body>
-    <div class="container-fluid">
-      <div id="content">
-        {% block content %}
-        {% endblock %}
-      </div>
-    </div>
+    {% block content %}
+    {% endblock %}
 
 
     <script src="{{ url_for('static', filename='bower_components/react/react.min.js') }}"></script>
     <script src="{{ url_for('static', filename='bower_components/react/JSXTransformer.js') }}"></script>
 
     <script src="{{ url_for('static', filename='bower_components/jquery/dist/jquery.min.js') }}"></script>
-
-    <script src="{{ url_for('static', filename='bower_components/less/dist/less.min.js') }}"></script>
 
     <script src="{{ url_for('static', filename='bower_components/underscore/underscore-min.js') }}"></script>
 

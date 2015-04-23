@@ -1,10 +1,152 @@
 /**
+ * LoginPage
+ */
+var LoginPage = React.createClass({
+  render: function() {
+    return (
+      <div>
+        <LoginNavBar />
+        <SignInModal />
+        <Body />
+      </div>
+    );
+  }
+});
+
+
+/**
+ * Navigation Bar.
+ */
+var LoginNavBar = React.createClass({
+  render: function() {
+    return (
+      <nav className="navbar navbar-default navbar-static-top">
+        <div className="container-fluid">
+          <div className="navbar-header">
+            <button type="button" className="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+              <span className="sr-only">Toggle navigation</span>
+              <span className="icon-bar"></span>
+              <span className="icon-bar"></span>
+              <span className="icon-bar"></span>
+            </button>
+            <a className="navbar-brand" href="#">Brand</a>
+          </div>
+
+          <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul className="nav navbar-nav navbar-right">
+              <li><a href="#" className="btn btn-default navbar-btn" data-toggle="modal" data-target="#signInModal">Sign in</a></li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    );
+  }
+});
+
+var SignInModal = React.createClass({
+  render: function() {
+    return (
+      <div className="modal fade" id="signInModal" aria-hidden="true">
+        <div className="modal-dialog modal-sm">
+          <div className="modal-content">
+            <div className="modal-body">
+              <form action="/" method="post" name="login">
+                <div className="form-group">
+                  <input type="text" className="form-control" id="email" name="email" placeholder="Email"></input>
+                </div>
+
+                <div className="form-group">
+                  <input type="password" className="form-control" id="password" name="password" placeholder="Password"></input>
+                </div>
+
+                <input className="btn btn-primary btn-block" type="submit" value="Sign In"></input>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+});
+
+var Body = React.createClass({
+  render: function() {
+    return (
+      <div className="container">
+      Is there something you'd like to get better at?
+
+      Maybe you picked up guitar a couple years ago and still only know the basics. Or
+      you've decided your writing could really use some improvement. Maybe you want to
+      become a better cook. Painter. Skateboarder. Photographer.
+
+      But life always gets in the way. Work picks up, you need to spend time with your
+      friends and family, that gorgeous view demands someone with a selfie stick goes and
+      takes a picture with it, whatever. The days go by, and you're still a mediocre
+      guitarist, and that gnawing itch that you can and should be better grows.
+
+      That's not the way it has to be.
+
+      You could be great.
+
+      Imagine if you consciously worked on your skill. Every. Single. Day.
+
+      Maybe some days it's just a couple of minutes, and others it's a couple of hours.
+      That's fine. Those scrapped minutes add up. Consistent practice is the most
+      fundamental weapon in your arsenal in the battle for progress.
+
+      APP_NAME is here to keep you honest. The task to practice every day and the
+      opportunitity to become awesome still lay on you. The wheel has been, is, and
+      always will be in your hands. But APP_NAME can provide feedback. Everyday, we'll
+      ask you how much you honed your craft. Simply respond to the email with the number
+      of hours you practiced, and move on with your busy day. We'll store the results and
+      warn you when you're slipping or congratulate you when you're on a streak. A simple
+      feedback cycle, to keep us all fully accountable for our choices, actions, and
+      destiny.
+
+      Take the wheel and venture forth towards your goal. APP_NAME will help you get there.
+
+        <p>Sign up, it's easy</p>
+
+        <div className="row">
+          <div className="col-xs-4 col-xs-offset-4">
+            <form action="/signup" method="post" name="login">
+              <div className="form-group">
+                  <input type="text" className="form-control" id="firstName" name="firstName" placeholder="First Name"></input>
+              </div>
+
+              <div className="form-group">
+                  <input type="text" className="form-control" id="lastName" name="lastName" placeholder="Last Name"></input>
+              </div>
+
+              <div className="form-group">
+                <input type="text" className="form-control" id="email" name="email" placeholder="Email"></input>
+              </div>
+
+              <div className="form-group">
+                <input type="password" className="form-control" id="password" name="password" placeholder="Password"></input>
+              </div>
+
+              <input className="btn btn-primary btn-block" type="submit" value="Sign Up"></input>
+            </form>
+          </div>
+        </div>
+      </div>
+    );
+  }
+});
+
+
+
+
+
+
+/**
  * The overall Application.
  */
 var Application = React.createClass({
   render: function() {
     return (
-      <div>
+      <div className="container-fluid">
         <NavBar />
         <ProjectBox />
       </div>
@@ -51,7 +193,6 @@ var NavBar = React.createClass({
     );
   }
 });
-
 
 /**
  * Component that holds all of a user's project information.
@@ -265,10 +406,19 @@ var CreateProjectModal = React.createClass({
 });
 
 
-var reactElement = document.getElementById('react');
-if (reactElement) {
-  React.render(
-    <Application />,
-    reactElement
-  );
-}
+$(document).ready(function() {
+  var reactElement = document.getElementById('react');
+  var loginElement = document.getElementById('login');
+
+  if (reactElement) {
+    React.render(
+      <Application />,
+      reactElement
+    );
+  } else if (loginElement) {
+    React.render(
+      <LoginPage />,
+      loginElement
+    );
+  }
+});

@@ -34,19 +34,36 @@ def before_request():
 def home():
     if g.user is not None and g.user.is_authenticated():
         return render_template('home.html')
-    form = LoginForm()  # TODO make form
-    if form.validate_on_submit():
-        email = form.email.data
+
+    if request.method == "POST":
+        email = request.form["email"]
+        password = request.form["password"]
+
         user = User.query.filter_by(email=email).first()
-        valid = str(hash(form.password.data)) == user.password  # TODO
+        valid = str(hash(password)) == user.password
 
         if valid:
             login_user(user) # TODO
             return render_template('home.html')
         else:
-            #flash('Invalid login, please try again.')
-            return render_template('login.html', form=form)
-    return render_template('login.html', form=form)
+            return render_template('login.html')
+    return render_template('login.html')
+
+@app.route('/signup', methods=['POST'])
+def signup():
+    email = request.form["email"]
+    password = request.form["password"]
+    firstName = request.form["firstName"]
+    lastName = request.form["lastName"]
+    signUpDate = datetime.date.today()
+
+    newUser = User(email, hash(password), signUpDate, firstName, lastName)
+    db.session.add(newUser)
+    db.session.commit()
+
+    login_user(newUser)
+
+    return redirect(url_for('home'))
 
 @app.route('/logout')
 def logout():
