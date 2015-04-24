@@ -30,6 +30,7 @@ def before_request():
 # ROUTES          #
 ###################
 
+# Displays the login page or home page.
 @app.route('/', methods=['GET', 'POST'])
 def home():
     if g.user is not None and g.user.is_authenticated():
@@ -49,6 +50,7 @@ def home():
             return render_template('login.html')
     return render_template('login.html')
 
+# Adds a user to the User table and redirects to home page.
 @app.route('/signup', methods=['POST'])
 def signup():
     email = request.form["email"]
@@ -65,7 +67,8 @@ def signup():
 
     return redirect(url_for('home'))
 
-@app.route('/logout')
+# Logs a user out and redirects to login page.
+@app.route('/logout', methods=['GET'])
 def logout():
     logout_user()
     return redirect(url_for('home'))
