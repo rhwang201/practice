@@ -1,13 +1,8 @@
 import mandrill
-
-envVars = {}
-with open('.env', 'r') as f:
-  for line in f:
-    key, value = line.split('=')
-    envVars[key] = value.strip('\n')
+import os
 
 
-m = mandrill.Mandrill(str(envVars['MANDRILL_APIKEY']))
+m = mandrill.Mandrill(os.environ['MANDRILL_APIKEY'])
 
 try:
   message = {
