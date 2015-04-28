@@ -44,7 +44,7 @@ def home():
         valid = str(hash(password)) == user.password
 
         if valid:
-            login_user(user) # TODO
+            login_user(user)
             return render_template('home.html')
         else:
             return render_template('login.html')
@@ -59,6 +59,7 @@ def signup():
     lastName = request.form["lastName"]
     signUpDate = datetime.date.today()
 
+    # TODO salt password
     newUser = User(email, hash(password), signUpDate, firstName, lastName)
     db.session.add(newUser)
     db.session.commit()
