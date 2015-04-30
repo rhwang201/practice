@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  <head lang="en">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Test Title</title>
+
+    <style>
+    </style>
+  </head>
+
+  <body>
+    <h2>How much did you hone your craft yesterday?</h2>
+
+    {{#each projects}}
+      <h3>{{this.name}}</h3>
+
+      <form action="http://localhost:5000/api/logPractice" method="post" name="log_time">
+        <label for="log">Time</label>
+        <input type="number" id="log" name="log"/>
+
+        <input type="hidden" id="id" name="id" value="{{this.id}}"/>
+        <input type="hidden" id="date" name="date" value="{{date}}"/>
+
+        <input type="submit" value="Log"/>
+      </form>
+    {{/each}}
+  </body>
+</html>

@@ -107,3 +107,19 @@ def updateProject():
 def removeProject():
     # TODO
     return jsonify(projects=None)
+
+
+@app.route('/api/logPractice', methods=['POST'])
+def logPractice():
+    projectId = request.form["id"]
+    logDate = datetime.datetime.strptime(request.form["date"], '%d/%m/%Y')
+    loggedTime = float(request.form["log"])
+
+    project = Project.query.filter_by(id=projectId).first()
+    newLog = Log(logDate, loggedTime, project)
+
+    db.session.add(newLog)
+    db.session.commit()
+
+    # TODO return a nice 'form submitted page'
+    return jsonify(projects=None)
