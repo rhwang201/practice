@@ -88,9 +88,7 @@ def createProject():
     db.session.add(project)
     db.session.commit()
 
-    projects = [{'projectName': project.name, 'practice': [[log.timestamp, log.timeLogged] for log in project.logs]} for project in g.user.projects]
-
-    return jsonify(projects=projects)
+    return getProjects()
 
 @app.route('/api/getProjects.json', methods=['GET'])
 def getProjects():
@@ -106,6 +104,9 @@ def updateProject():
 @app.route('/api/removeProject')
 def removeProject():
     # TODO
+    projectId = None
+    Project.query.filter_by(id=projectId).delete()
+
     return jsonify(projects=None)
 
 
@@ -121,5 +122,4 @@ def logPractice():
     db.session.add(newLog)
     db.session.commit()
 
-    # TODO return a nice 'form submitted page'
-    return jsonify(projects=None)
+    return render_template('log_submit.html')
