@@ -290,7 +290,10 @@ var PracticeChart = React.createClass({
    */
   renderChart: function() {
     var domElement = React.findDOMNode(this),
-        data = this.props.data;
+        data = _.map(this.props.data, function(data) {
+          var date = new Date(data[0]);
+          return [date.valueOf(), data[1]];
+        });
 
     $(domElement).highcharts({
       title: {
